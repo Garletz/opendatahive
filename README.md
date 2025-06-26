@@ -253,4 +253,14 @@ If authentication isn't working:
 
 ---
 
-Made with ❤️ for the open data community
+## 📞 Contact
+
+Get in touch with the OpenDataHive team:
+
+[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://x.com/opendatahive)
+[![Devpost](https://img.shields.io/badge/Devpost-003E54?style=for-the-badge&logo=devpost&logoColor=white)](https://devpost.com/lixo-argent/followers)
+[![WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/33628782725)
+
+---
+
+Built for the open data community 🌍
