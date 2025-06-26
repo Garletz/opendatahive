@@ -7,6 +7,14 @@ A modern, interactive platform for discovering and managing open data sources, s
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6.2-blue)
 ![Firebase](https://img.shields.io/badge/Firebase-11.9.1-orange)
 
+## 🎥 Demo Video
+
+Watch the full presentation and demo of OpenDataHive:
+
+[![OpenDataHive Demo](https://img.youtube.com/vi/MtsT2KD26II/maxresdefault.jpg)](https://www.youtube.com/watch?v=MtsT2KD26II)
+
+*Click the image above to watch the video on YouTube*
+
 ## ✨ Features
 
 - **Interactive Hexagonal Grid**: Visualize data sources in a beautiful honeycomb layout
