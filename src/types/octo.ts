@@ -32,6 +32,9 @@ export interface Octo {
   isNested?: boolean;
   nestedGroupId?: string;
   position?: number;
+  // Hex grid position (for My Hive drag & drop)
+  gridU?: number;
+  gridV?: number;
 
   stats?: {
     views: number;

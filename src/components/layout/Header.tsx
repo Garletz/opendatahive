@@ -14,7 +14,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onMyOctos = () => { }, onSettings = () => { } }) => {
   const { searchTerm, setSearchTerm } = useSearch();
-  const { trendingFilter, setTrendingFilter, viewMode, setViewMode, setTargetUserId } = useHive();
+  const { viewMode, setViewMode, setTargetUserId } = useHive();
   const { openModal } = useModal();
   const { user } = useAuth();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -80,7 +80,7 @@ const Header: React.FC<HeaderProps> = ({ onMyOctos = () => { }, onSettings = () 
   return (
     <>
       <motion.header
-        className="fixed top-0 left-0 right-0 z-40 bg-black/30 backdrop-blur-md border-b border-white/5 shadow-2xl"
+        className="fixed top-0 left-0 right-0 z-40 bg-transparent border-b border-white/10"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
@@ -90,10 +90,12 @@ const Header: React.FC<HeaderProps> = ({ onMyOctos = () => { }, onSettings = () 
             {/* Logo Section */}
             <div className="flex items-center gap-3 min-w-fit">
               <div className="hidden lg:block">
-                <h1 className="text-white font-bold text-xl tracking-tight">
-                  OpenData<span className="text-white">Hive</span>
+                <h1
+                  className="text-white font-bold text-2xl tracking-tight"
+                  style={{ fontFamily: "'Quicksand', 'Nunito', 'Comfortaa', sans-serif", fontWeight: 700 }}
+                >
+                  OpenDataHive
                 </h1>
-                <p className="text-white/50 text-xs font-medium uppercase tracking-wider">Data Intelligence</p>
               </div>
             </div>
 
@@ -218,28 +220,6 @@ const Header: React.FC<HeaderProps> = ({ onMyOctos = () => { }, onSettings = () 
               </div>
 
               <div className="space-y-6 flex-1">
-                <div className="space-y-2">
-                  <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Filters</h3>
-                  {[
-                    { key: 'all', label: 'All Sources' },
-                    { key: 'trending', label: 'Trending' },
-                    { key: 'recent', label: 'Recently Added' }
-                  ].map(({ key, label }) => (
-                    <button
-                      key={key}
-                      onClick={() => {
-                        setTrendingFilter(key as any);
-                        setShowMobileMenu(false);
-                      }}
-                      className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all ${trendingFilter === key
-                        ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
-                        : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
-                        }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
 
                 <div className="space-y-3">
                   <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Actions</h3>

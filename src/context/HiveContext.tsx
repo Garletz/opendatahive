@@ -11,8 +11,8 @@ interface HiveContextType {
   trendingFilter: 'all' | 'trending' | 'recent';
   setTrendingFilter: (filter: 'all' | 'trending' | 'recent') => void;
   refreshOctos: () => Promise<void>;
-  viewMode: 'public' | 'personal' | 'all-users';
-  setViewMode: (mode: 'public' | 'personal' | 'all-users') => void;
+  viewMode: 'public' | 'personal' | 'projects' | 'all-users' | 'chat';
+  setViewMode: (mode: 'public' | 'personal' | 'projects' | 'all-users' | 'chat') => void;
   targetUserId: string | null;
   setTargetUserId: (userId: string | null) => void;
 }
@@ -21,12 +21,12 @@ const HiveContext = createContext<HiveContextType>({
   octos: [],
   loading: true,
   trendingFilter: 'all',
-  setTrendingFilter: () => {},
-  refreshOctos: async () => {},
+  setTrendingFilter: () => { },
+  refreshOctos: async () => { },
   viewMode: 'public',
-  setViewMode: () => {},
+  setViewMode: () => { },
   targetUserId: null,
-  setTargetUserId: () => {},
+  setTargetUserId: () => { },
 });
 
 export const useHive = () => useContext(HiveContext);
@@ -38,14 +38,14 @@ export const HiveProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [octos, setOctos] = useState<Octo[]>([]);
   const [loading, setLoading] = useState(true);
   const [trendingFilter, setTrendingFilter] = useState<'all' | 'trending' | 'recent'>('all');
-  const [viewMode, setViewMode] = useState<'public' | 'personal' | 'all-users'>('public');
+  const [viewMode, setViewMode] = useState<'public' | 'personal' | 'projects' | 'all-users' | 'chat'>('projects');
   const [targetUserId, setTargetUserId] = useState<string | null>(null);
 
   const refreshOctos = async () => {
     try {
       const firestoreOctos = await getOctos();
       let filteredOctos: Octo[];
-      
+
       if (viewMode === 'all-users') {
         // Mode all-users : aucun octo affiché (seulement les utilisateurs sur la carte)
         filteredOctos = [];
@@ -63,7 +63,7 @@ export const HiveProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Mode public : octos publics de tous
         filteredOctos = firestoreOctos.filter(octo => octo.isPublic !== false);
       }
-      
+
       // Enrichir les octos avec les statistiques
       const enrichedOctos = await Promise.all(
         filteredOctos.map(async (octo) => {
@@ -85,7 +85,7 @@ export const HiveProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       // Appliquer le filtre de tendance
       let sortedOctos = enrichedOctos;
-      
+
       if (trendingFilter === 'trending') {
         // Filtrer les octos avec un score de tendance élevé ou marqués comme tendance
         sortedOctos = enrichedOctos
@@ -104,7 +104,7 @@ export const HiveProvider: React.FC<{ children: React.ReactNode }> = ({ children
             return scoreB - scoreA;
           });
       } else if (trendingFilter === 'recent') {
-        sortedOctos = enrichedOctos.sort((a, b) => 
+        sortedOctos = enrichedOctos.sort((a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
       } else {
@@ -118,7 +118,7 @@ export const HiveProvider: React.FC<{ children: React.ReactNode }> = ({ children
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         });
       }
-      
+
       // Si la base de données est vide, ajouter les données de test
       if (firestoreOctos.length === 0 && user) {
         console.log("Empty database, adding test data...");
@@ -134,7 +134,7 @@ export const HiveProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
         // Récupérer à nouveau les octos après l'ajout des données de test
         const updatedOctos = await getOctos();
-        const filteredUpdatedOctos = updatedOctos.filter(octo => 
+        const filteredUpdatedOctos = updatedOctos.filter(octo =>
           octo.isPublic !== false || octo.authorId === user?.id
         );
         setOctos(filteredUpdatedOctos);

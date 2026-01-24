@@ -48,7 +48,7 @@ export default class RegularPolygonMeshFactory {
     const sides = item.sides || 6;
     const thickness = item.thickness || 2;
     const fillColor = item.fillColor || item.color || "#ff0000";
-    
+
     // Create a cylinder for the polygon
     const cylinder = babylon.MeshBuilder.CreateCylinder(
       item.id || `polygon_${this.internalId}`,
@@ -61,16 +61,16 @@ export default class RegularPolygonMeshFactory {
       },
       scene
     ) as PolygonMesh;
-    
+
     // Create material
     const material = new babylon.StandardMaterial(
       `polygonMaterial_${this.internalId}`,
       scene
     );
-    
+
     // Apply color
     const rgb = this.hexToRgb(fillColor);
-    
+
     if (rgb) {
       material.diffuseColor = new babylon.Color3(
         rgb.r / 256,
@@ -83,7 +83,7 @@ export default class RegularPolygonMeshFactory {
       material.diffuseColor = new babylon.Color3(1, 0, 0);
       material.ambientColor = material.diffuseColor;
     }
-    
+
     cylinder.material = material;
 
     // Increment internal ID for unique naming

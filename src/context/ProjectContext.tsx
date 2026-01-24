@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Project, HiveNode } from '@/types';
 import { useAuth } from './AuthContext';
 import { useFirebase } from './FirebaseContext';
-import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 
 
@@ -12,7 +12,10 @@ interface ProjectContextType {
     projectNodes: HiveNode[];
     setActiveProject: (project: Project | null) => void;
     createProject: (name: string, description: string) => Promise<void>;
+    deleteProject: (projectId: string) => Promise<void>;
     addNode: (node: Omit<HiveNode, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
+    updateNode: (nodeId: string, updates: Partial<HiveNode>) => Promise<void>;
+    deleteNode: (nodeId: string) => Promise<void>;
 }
 
 const ProjectContext = createContext<ProjectContextType>({
@@ -21,7 +24,10 @@ const ProjectContext = createContext<ProjectContextType>({
     projectNodes: [],
     setActiveProject: () => { },
     createProject: async () => { },
+    deleteProject: async () => { },
     addNode: async () => { },
+    updateNode: async () => { },
+    deleteNode: async () => { },
 });
 
 export const useProject = () => useContext(ProjectContext);
@@ -118,6 +124,26 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
     };
 
+    const deleteProject = async (projectId: string) => {
+        if (!db) return;
+
+        try {
+            // Delete project document
+            await deleteDoc(doc(db, 'projects', projectId));
+
+            // Remove from local state
+            setProjects(prev => prev.filter(p => p.id !== projectId));
+
+            // Clear active project if it was deleted
+            if (activeProject?.id === projectId) {
+                setActiveProject(null);
+                setProjectNodes([]);
+            }
+        } catch (err) {
+            console.error("Error deleting project:", err);
+        }
+    };
+
     const addNode = async (nodeData: Omit<HiveNode, 'id' | 'createdAt' | 'updatedAt'>) => {
         if (!db) return;
 
@@ -137,6 +163,40 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
     };
 
+    const updateNode = async (nodeId: string, updates: Partial<HiveNode>) => {
+        if (!db) return;
+
+        try {
+            const nodeRef = doc(db, 'hiveNodes', nodeId);
+            const updateData = {
+                ...updates,
+                updatedAt: new Date().toISOString()
+            };
+
+            await updateDoc(nodeRef, updateData);
+
+            // Update local state
+            setProjectNodes(prev => prev.map(node =>
+                node.id === nodeId ? { ...node, ...updateData } : node
+            ));
+        } catch (err) {
+            console.error("Error updating node:", err);
+        }
+    };
+
+    const deleteNode = async (nodeId: string) => {
+        if (!db) return;
+
+        try {
+            await deleteDoc(doc(db, 'hiveNodes', nodeId));
+
+            // Remove from local state
+            setProjectNodes(prev => prev.filter(node => node.id !== nodeId));
+        } catch (err) {
+            console.error("Error deleting node:", err);
+        }
+    };
+
     return (
         <ProjectContext.Provider value={{
             projects,
@@ -144,7 +204,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
             projectNodes,
             setActiveProject,
             createProject,
-            addNode
+            deleteProject,
+            addNode,
+            updateNode,
+            deleteNode
         }}>
             {children}
         </ProjectContext.Provider>

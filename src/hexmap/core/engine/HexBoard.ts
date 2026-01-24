@@ -20,21 +20,25 @@ export default class HexBoard extends EventEmitter {
   public pickerPlane: babylon.Plane;
   public hexDimensions?: HexDimensions;
 
-  // Camera control variables
   private cameraTargetX: number = 0;
   private cameraTargetY: number = 0;
   private cameraAlpha: number = Math.PI / 4;
   private cameraBeta: number = 0;
   private cameraRadius: number = Math.sqrt(1000 * 1000 + 1000 * 1000);
   private mode: CameraMode = 'pan';
+  public disablePan: boolean = false; // Disabled during object drag
   private window: Window;
+  private canvas!: HTMLCanvasElement;
   private pointerObserver?: babylon.Observer<babylon.PointerInfo>;
   private resizeHandler?: () => void;
+  private wheelHandler?: (e: WheelEvent) => void;
+  private keydownHandler?: (e: KeyboardEvent) => void;
 
   constructor(canvas: HTMLCanvasElement, window: Window, backgroundColor: string) {
     super();
 
     this.window = window;
+    this.canvas = canvas;
 
     //Setup babylonjs
     this.engine = new babylon.Engine(canvas, true);
@@ -113,6 +117,81 @@ export default class HexBoard extends EventEmitter {
         }
       };
       window.addEventListener("resize", this.resizeHandler);
+
+      // Wheel event for intuitive trackpad/mouse scrolling
+      // Two-finger scroll = pan (like scrolling a webpage)
+      // Ctrl + scroll or pinch = zoom
+      this.wheelHandler = (e: WheelEvent) => {
+        e.preventDefault();
+
+        if (e.ctrlKey || e.metaKey) {
+          // Pinch-to-zoom on trackpad sends ctrlKey + wheel
+          // Positive deltaY = zoom out, negative = zoom in
+          this.zoom(e.deltaY * 2);
+        } else {
+          // Regular two-finger scroll = pan
+          // deltaX = horizontal scroll, deltaY = vertical scroll
+          // We invert to make it feel like dragging the content
+          this.pan(e.deltaY * 0.8, -e.deltaX * 0.8);
+        }
+      };
+      canvas.addEventListener("wheel", this.wheelHandler, { passive: false });
+
+      // Keyboard navigation
+      this.keydownHandler = (e: KeyboardEvent) => {
+        // Don't capture if user is typing in an input
+        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+          return;
+        }
+
+        const panStep = 80;
+        const zoomStep = 50;
+
+        switch (e.key.toLowerCase()) {
+          case 'arrowup':
+          case 'w':
+            e.preventDefault();
+            this.pan(-panStep, 0);
+            break;
+          case 'arrowdown':
+          case 's':
+            e.preventDefault();
+            this.pan(panStep, 0);
+            break;
+          case 'arrowleft':
+          case 'a':
+            e.preventDefault();
+            this.pan(0, -panStep);
+            break;
+          case 'arrowright':
+          case 'd':
+            e.preventDefault();
+            this.pan(0, panStep);
+            break;
+          case '+':
+          case '=':
+            e.preventDefault();
+            this.zoom(-zoomStep);
+            break;
+          case '-':
+          case '_':
+            e.preventDefault();
+            this.zoom(zoomStep);
+            break;
+          case 'r':
+            // Reset rotation
+            e.preventDefault();
+            this.resetRotation();
+            break;
+          case 'home':
+          case 'h':
+            // Return to center
+            e.preventDefault();
+            this.centerOnCell(0, 0);
+            break;
+        }
+      };
+      window.addEventListener("keydown", this.keydownHandler);
     }
 
     // Babylon.js Pointer Observer for mouse/touch events
@@ -179,7 +258,9 @@ export default class HexBoard extends EventEmitter {
             // Appelle la bonne méthode selon le mode
             switch (this.mode) {
               case 'pan':
-                this.pan(-dy, dx); // Correction pour que le drag horizontal soit intuitif
+                if (!this.disablePan) {
+                  this.pan(-dy, dx); // Correction pour que le drag horizontal soit intuitif
+                }
                 break;
               case 'tilt':
                 this.tilt(Math.PI * (dx + dy) / 500);
@@ -216,6 +297,18 @@ export default class HexBoard extends EventEmitter {
     if (this.resizeHandler && this.window) {
       this.window.removeEventListener("resize", this.resizeHandler);
       this.resizeHandler = undefined;
+    }
+
+    // Clean up wheel handler
+    if (this.wheelHandler && this.canvas) {
+      this.canvas.removeEventListener("wheel", this.wheelHandler);
+      this.wheelHandler = undefined;
+    }
+
+    // Clean up keyboard handler
+    if (this.keydownHandler && this.window) {
+      this.window.removeEventListener("keydown", this.keydownHandler);
+      this.keydownHandler = undefined;
     }
 
     // Clean up Babylon.js scene

@@ -139,7 +139,7 @@ export const FirebaseProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         );
         filesMeta = filesMeta.filter(Boolean);
       }
-      const octoToSave = { ...octo, files: filesMeta };
+      const octoToSave = { ...octo, files: filesMeta } as any;
       delete octoToSave['file'];
       // On enlève la clé 'file' de chaque fichier
       if (octoToSave.files) {

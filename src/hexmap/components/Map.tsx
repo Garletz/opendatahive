@@ -34,6 +34,8 @@ import { ChatPanel } from '../../components/ChatPanel';
 import { GridAction } from '../../services/MistralService';
 import { motion } from "framer-motion";
 import { HexArchitect } from "../core/logic/HexArchitect";
+// Three.js Engine (new)
+import { ThreeEngine } from "../three";
 // getAllUsersWithUV and useGun imports removed as they're not used
 
 interface MapProps extends BaseMapProps {
@@ -60,6 +62,9 @@ interface MapState {
   backgroundColor: string;
   showSettingsPanel: boolean;
   pulseEffect: boolean;
+  useThreeJs: boolean; // NEW: Engine toggle
+  selectedOctoId: string | null; // NEW: For Three.js selection state
+  engineToggleCount: number; // NEW: Counter to force canvas remount
 }
 
 function arraysEqualById(a?: any[], b?: any[]) {
@@ -98,6 +103,9 @@ class Map extends Component<MapProps, MapState> {
       backgroundColor: "#000000",
       showSettingsPanel: false,
       pulseEffect: false,
+      useThreeJs: false, // Start with Babylon.js
+      selectedOctoId: null,
+      engineToggleCount: 0, // Start at 0
     };
     this.canvasRef = createRef();
   }
@@ -107,7 +115,7 @@ class Map extends Component<MapProps, MapState> {
     const infoPanelTop = headerHeight + 20;
     const infoPanelRight = 20;
     // const controlsPanelTop = infoPanelTop + this.state.infoPanelHeight + 20; // Variable not used
-    const { isMobile } = this.state;
+    const { isMobile, useThreeJs } = this.state;
     return (
       <div style={{
         position: "fixed",
@@ -117,20 +125,96 @@ class Map extends Component<MapProps, MapState> {
         left: 0,
         overflow: "hidden"
       }}>
-        <canvas
-          ref={this.canvasRef}
-          tabIndex={0}
+        {/* ENGINE TOGGLE: Render either Babylon.js canvas or Three.js engine */}
+        {useThreeJs ? (
+          <ThreeEngine
+            // Mode-aware octo list: hide in all-users mode, use project nodes if active project
+            octos={
+              this.props.showAllUsers || this.props.viewMode === 'all-users'
+                ? [] // Don't show octos in all-users mode
+                : this.props.activeProject && this.props.projectNodes?.length > 0
+                  ? undefined // Use projectNodes instead
+                  : this.props.octos
+            }
+            onOctoClick={(octo) => {
+              // Toggle selection or open modal
+              if (this.state.selectedOctoId === octo.id) {
+                this.setState({ selectedOctoId: null });
+                this.props.onOctoClick?.(octo);
+              } else {
+                this.setState({ selectedOctoId: octo.id });
+                this.props.addAlert({ type: 'info', text: `Selected "${octo.title || octo.id}". Click grid to move.` });
+              }
+            }}
+            onGridClick={(u, v) => {
+              // If octo is selected, move it
+              if (this.state.selectedOctoId) {
+                this.props.addAlert({ type: 'success', text: `Moved to (${u}, ${v})` });
+                this.setState({ selectedOctoId: null });
+                // Note: Actual move would require onOctoDrop prop (add later)
+              } else {
+                this.props.addAlert({ type: 'info', text: `Grid cell: U:${u} V:${v}` });
+              }
+            }}
+            onShowOctos={() => {
+              // Trigger octo spiral loading (matching Babylon.js sun click behavior)
+              this.props.addAlert({ type: 'info', text: 'Sun: loading octos in spiral...' });
+              if (this.props.onShowOctos) {
+                this.props.onShowOctos();
+              }
+            }}
+            viewMode={this.props.viewMode}
+            projectNodes={this.props.projectNodes}
+            showAllUsers={this.props.showAllUsers || this.props.viewMode === 'all-users'}
+            gun={this.props.gun}
+            onUserClick={this.props.onUserClick}
+            backgroundColor={this.state.backgroundColor}
+            gridColor={this.state.gridColor}
+            pulseEnabled={this.state.pulseEffect}
+            selectedOctoId={this.state.selectedOctoId}
+          />
+        ) : (
+          <canvas
+            key={`babylon-canvas-${this.state.engineToggleCount}`}
+            ref={this.canvasRef}
+            tabIndex={0}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              backgroundColor: "#0a0a0a",
+              width: "100%",
+              height: "100%",
+              zIndex: 200,
+              pointerEvents: "auto"
+            }}
+          />
+        )}
+
+        {/* Engine Toggle Button */}
+        <button
+          onClick={() => this.setState(prev => ({
+            useThreeJs: !prev.useThreeJs,
+            engineToggleCount: prev.engineToggleCount + 1
+          }))}
           style={{
             position: "absolute",
-            top: 0,
-            left: 0,
-            backgroundColor: "#0a0a0a",
-            width: "100%",
-            height: "100%",
-            zIndex: 200,
-            pointerEvents: "auto"
+            bottom: "20px",
+            left: "20px",
+            zIndex: 600,
+            background: useThreeJs ? "#4f46e5" : "#334155",
+            color: "white",
+            border: "none",
+            padding: "10px 16px",
+            borderRadius: "8px",
+            fontWeight: "bold",
+            cursor: "pointer",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
+            fontSize: "0.85rem"
           }}
-        />
+        >
+          {useThreeJs ? "⚡ Engine: Three.js" : "🏺 Engine: Babylon.js"}
+        </button>
 
         {/* Settings Panel */}
         {this.state.showSettingsPanel && (
@@ -256,7 +340,13 @@ class Map extends Component<MapProps, MapState> {
             <button
               type="button"
               className="custom-btn custom-btn-warning"
-              onClick={() => { if (this.hexBoard) { this.hexBoard.resetRotation(); } }}
+              onClick={() => {
+                if (this.state.useThreeJs) {
+                  (window as any).__hiveCamera?.resetRotation?.();
+                } else if (this.hexBoard) {
+                  this.hexBoard.resetRotation();
+                }
+              }}
               style={{ fontSize: "0.8em", marginBottom: "6px" }}>
               Reset Rotation
             </button>
@@ -358,8 +448,17 @@ class Map extends Component<MapProps, MapState> {
 
   setMode(mode: CameraMode): void {
     this.setState({ mode });
-    if (this.hexBoard) {
-      this.hexBoard.setMode(mode);
+    // Call the appropriate engine's camera mode setter
+    if (this.state.useThreeJs) {
+      // Three.js mode: use the exposed window.__hiveCamera API
+      if ((window as any).__hiveCamera?.setMode) {
+        (window as any).__hiveCamera.setMode(mode);
+      }
+    } else {
+      // Babylon.js mode
+      if (this.hexBoard) {
+        this.hexBoard.setMode(mode);
+      }
     }
   }
 
@@ -821,7 +920,37 @@ class Map extends Component<MapProps, MapState> {
     }, 100);
   }
 
-  componentDidUpdate(prevProps: MapProps) {
+  componentDidUpdate(prevProps: MapProps, prevState: MapState) {
+    // Handle engine toggle back to Babylon.js
+    if (prevState?.useThreeJs && !this.state.useThreeJs) {
+      console.log("Switched back to Babylon.js - reinitializing engine...");
+      // Clear old references
+      this.hexBoard = undefined;
+      this.gridContext = undefined;
+      // Wait for canvas to be mounted with new key, then reinitialize
+      setTimeout(() => {
+        const canvas = this.canvasRef.current;
+        if (canvas && !this.hexBoard) {
+          console.log("Canvas found, reinitializing Babylon.js...");
+          // Re-run the same init code as componentDidMount
+          this.resizeCanvas(canvas);
+          this.hexBoard = new HexBoard(canvas, window, "#000000");
+          const hexDimensions = new HexDefinition(55, 1, 0, 3);
+          this.hexBoard.setHexDimensions(hexDimensions);
+          this._starryContext = new StarryContext(hexDimensions, this.hexBoard, 300);
+          this.gridContext = new GridContext(hexDimensions, this.hexBoard, "#808080", 15, 15, 0.5);
+          if (this.gridContext) {
+            this.gridContext.setColor(this.state.gridColor);
+          }
+          // Reinitialize the pipeline with sample objects
+          this.pipelineStart = new EmittingDataSource();
+          this.addSampleObjects(this.pipelineStart);
+          this.props.addAlert({ type: 'success', text: 'Babylon.js engine restored' });
+        }
+      }, 200);
+      return;
+    }
+
     // Check if active project changed or project nodes changed
     if (this.props.activeProject?.id !== prevProps.activeProject?.id ||
       !arraysEqualById(this.props.projectNodes, prevProps.projectNodes)) {
