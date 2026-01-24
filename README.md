@@ -25,18 +25,11 @@
 ---
 
 ## Screenshots
+<img width="2560" height="1600" alt="localhost_3000_(Nest Hub Max) (2)" src="https://github.com/user-attachments/assets/5d932348-d341-4f53-a8c1-e81a37821e09" />
+<img width="2560" height="1600" alt="opendatahive com_(Nest Hub Max)" src="https://github.com/user-attachments/assets/55eddb77-4e09-489e-809a-26656469bf90" />
+<img width="2560" height="1600" alt="localhost_3000_(Nest Hub Max)" src="https://github.com/user-attachments/assets/f99512de-d87d-4aab-9a07-30bd1519bf1f" />
+<img width="2560" height="1600" alt="localhost_3000_(Nest Hub Max) (1)" src="https://github.com/user-attachments/assets/c4ce5948-88a5-4f82-9ea7-10087146a946" />
 
-### Main Interface
-![Main Hexagonal Grid Interface](./docs/screenshots/main-interface.png)
-
-### Three.js Engine
-![Three.js Rendering Engine](./docs/screenshots/threejs-engine.png)
-
-### Babylon.js Engine
-![Babylon.js Rendering Engine](./docs/screenshots/babylonjs-engine.png)
-
-### Data Visualization
-![Octo Data Objects](./docs/screenshots/data-visualization.png)
 
 ---
 
