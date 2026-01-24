@@ -1,6 +1,6 @@
-# 🌐 OpenDataHive - 3D Hexagonal Grid Framework for Data Visualization
+# OpenDataHive - 3D Hexagonal Grid Visualization Framework
 
-> **Transform your data into an immersive 3D spatial experience** with our powerful hexagonal grid visualization framework. Perfect for project management, data exploration, and creating interactive spatial interfaces.
+> A powerful spatial interface framework for organizing and visualizing data in immersive 3D hexagonal grids. Built with React, Three.js, and Babylon.js.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6+-blue.svg)](https://www.typescriptlang.org/)
@@ -10,70 +10,94 @@
 
 ---
 
-## 🎯 What is OpenDataHive?
+## Overview
 
-**OpenDataHive** is a cutting-edge **3D hexagonal grid visualization framework** built for modern web applications. It provides an intuitive spatial interface for organizing, visualizing, and interacting with data in three-dimensional space.
+**OpenDataHive** is a production-ready 3D hexagonal grid visualization framework designed for modern web applications. It provides developers with a robust spatial interface system for building interactive data exploration tools, project management applications, and immersive user experiences.
 
-### 🌟 Perfect For:
-- 🗂️ **Spatial Project Management** - Organize projects in an immersive 3D workspace
-- 📊 **Data Visualization** - Display complex datasets on an interactive hexagonal grid
-- 🎮 **Game Development** - Hex-based game maps and strategic interfaces
-- 🏗️ **Architecture & Design** - Spatial planning and layout visualization
-- 🤖 **AI-Powered Interfaces** - Context-aware spatial organization systems
+### Core Use Cases
 
----
-
-## 🚀 Key Features
-
-### **Dual Rendering Engine**
-- ⚡ **Three.js (React Three Fiber)** - Modern, performant 3D rendering
-- 🏺 **Babylon.js** - Robust fallback with advanced features
-- 🔄 **Real-time Engine Switching** - Toggle between engines on-the-fly
-
-### **Hexagonal Grid System**
-- 🔷 **Infinite Scrolling Grid** - Seamlessly pan across unlimited space
-- 🌀 **Spiral Layout Algorithm** - Automatic positioning for optimal spacing
-- 📐 **Honeycomb Coordinate System** - Industry-standard hexagonal math
-- ✨ **Alpha Fade Effect** - Beautiful horizon fade for depth perception
-
-### **Interactive Camera Controls**
-- 🎥 **Pan, Tilt, Spin, Zoom** - Intuitive 6-DOF camera movement
-- ⌨️  **Keyboard Shortcuts** - WASD navigation, R to reset
-- 🖱️ **Mouse Controls** - Drag to pan, wheel to zoom
-- 🔄 **Rotation-Aware** - Pan direction adapts to camera orientation
-
-### **Data Visualization**
-- 📦 **Octo Objects** - 3D hexagonal data containers
-- 🎨 **File Type Colors** - Automatic color coding (JSON, CSV, PDF, etc.)
-- 📊 **Z-Stacking** - Layer management for overlapping items
-- 🏷️ **HTML Labels** - Readable, always-facing text annotations
-
-### **Modern Tech Stack**
-- ⚛️ **React 19** - Latest React with concurrent features
-- 📘 **TypeScript** - Full type safety
-- 🎨 **Tailwind CSS** - Utility-first styling
-- 🔥 **Firebase** - Authentication and real-time database
-- 🔫 **GunDB** - Decentralized data synchronization
+- **Spatial Project Management** - Organize projects and resources in 3D workspace environments
+- **Data Visualization Platforms** - Display complex datasets with intuitive hexagonal layouts
+- **Interactive Mapping** - Build custom spatial interfaces and navigation systems
+- **Game Development** - Create hex-based strategy games and tactical interfaces
+- **Educational Tools** - Teach spatial reasoning and coordinate system concepts
 
 ---
 
-## 📦 Installation
+## Screenshots
+
+### Main Interface
+![Main Hexagonal Grid Interface](./docs/screenshots/main-interface.png)
+
+### Three.js Engine
+![Three.js Rendering Engine](./docs/screenshots/threejs-engine.png)
+
+### Babylon.js Engine
+![Babylon.js Rendering Engine](./docs/screenshots/babylonjs-engine.png)
+
+### Data Visualization
+![Octo Data Objects](./docs/screenshots/data-visualization.png)
+
+---
+
+## Key Features
+
+### Dual Rendering Engine Architecture
+
+- **Three.js (React Three Fiber)** - Modern, performant WebGL rendering with declarative React components
+- **Babylon.js** - Enterprise-grade 3D engine with advanced features and broad compatibility
+- **Runtime Engine Switching** - Toggle between engines without page reload for A/B testing and fallback support
+
+### Advanced Hexagonal Grid System
+
+- **Infinite Scrolling** - Seamlessly navigate unlimited grid space with automatic culling
+- **Spiral Layout Algorithm** - Optimal automatic positioning for data objects
+- **Honeycomb Coordinates** - Industry-standard axial coordinate system (honeycomb-grid library)
+- **Distance-Based Fade** - Horizon fade effect for depth perception and performance
+
+### Professional Camera Controls
+
+- **6-DOF Movement** - Pan, tilt, spin, and zoom with smooth interpolation
+- **Keyboard Navigation** - Full WASD + arrow key support with customizable bindings
+- **Mouse Interaction** - Drag to pan, wheel to zoom, context-aware controls
+- **Rotation Adaptation** - Pan direction automatically adjusts to camera orientation
+
+### Rich Data Visualization
+
+- **Octo Objects** - 3D hexagonal containers for data with customizable appearance
+- **File Type Detection** - Automatic color coding for 12+ file formats (JSON, CSV, PDF, etc.)
+- **Z-Index Layering** - Intelligent stacking for overlapping objects
+- **HTML Label System** - Billboard labels that always face the camera
+
+### Modern Technology Stack
+
+- **React 19** - Latest React features with concurrent rendering
+- **TypeScript 5.6+** - Full type safety and IntelliSense support
+- **Tailwind CSS 3.4** - Utility-first styling framework
+- **Firebase 11.9** - Authentication and real-time database
+- **GunDB** - Optional decentralized P2P synchronization
+- **Vite 7.0** - Lightning-fast build tool and dev server
+
+---
+
+## Quick Start
 
 ### Prerequisites
-- **Node.js** ≥ 18.0.0
-- **npm** ≥ 9.0.0
 
-### Quick Start
+- Node.js >= 18.0.0
+- npm >= 9.0.0
+
+### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/opendatahive.git
+# Clone repository
+git clone https://github.com/Garletz/opendatahive.git
 cd opendatahive
 
 # Install dependencies
 npm install
 
-# Configure environment variables
+# Configure environment
 cp .env.example .env
 # Edit .env with your Firebase credentials
 
@@ -81,31 +105,37 @@ cp .env.example .env
 npm run dev
 ```
 
-Visit `http://localhost:3000` to see OpenDataHive in action! 🎉
+Navigate to `http://localhost:3000` to see the application.
 
 ---
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 src/
-├── hexmap/              # 🎯 Core hexagonal grid engine
-│   ├── core/           # Babylon.js implementation
-│   ├── three/          # Three.js (R3F) implementation
-│   ├── shared/         # Shared utilities (coordinates, hex math)
-│   └── components/     # React components (Map, Grid)
-├── components/          # 🧩 UI components
-│   ├── auth/           # Authentication components
-│   ├── modals/         # Modal dialogs
-│   └── layout/         # Layout components
-├── context/            # 🔌 React Context providers
-├── types/              # 📘 TypeScript definitions
-└── utils/              # 🛠️ Utility functions
+├── hexmap/                 # Core hexagonal grid engine
+│   ├── core/              # Babylon.js implementation
+│   │   ├── engine/        # HexBoard, camera controls
+│   │   └── grid/          # Grid rendering and particle systems
+│   ├── three/             # Three.js (R3F) implementation
+│   │   ├── core/          # HiveCamera, ThreeEngine
+│   │   ├── grid/          # InfiniteGrid component
+│   │   └── meshes/        # OctoRenderer, custom geometries
+│   ├── shared/            # Shared utilities
+│   │   └── utils/         # Hex math, coordinate conversion
+│   └── components/        # React components (Map, controls)
+├── components/            # UI components
+│   ├── auth/             # Authentication
+│   ├── modals/           # Modal dialogs
+│   └── layout/           # Layout components
+├── context/              # React Context providers
+├── types/                # TypeScript definitions
+└── utils/                # Utility functions
 ```
 
 ---
 
-## 💡 Usage Examples
+## Usage Examples
 
 ### Basic Hexagonal Map
 
@@ -113,9 +143,15 @@ src/
 import { Map } from './hexmap/components/Map';
 
 function App() {
+  const data = [
+    { id: '1', u: 0, v: 0, type: 'json', title: 'config.json' },
+    { id: '2', u: 1, v: 0, type: 'pdf', title: 'report.pdf' },
+    { id: '3', u: 0, v: 1, type: 'csv', title: 'data.csv' }
+  ];
+
   return (
     <Map
-      octos={yourDataArray}
+      octos={data}
       viewMode="public"
       onOctoClick={(octo) => console.log('Clicked:', octo)}
       backgroundColor="#000000"
@@ -128,191 +164,198 @@ function App() {
 ### Switching Render Engines
 
 ```tsx
-// Toggle between Three.js and Babylon.js
-<Map
-  useThreeJs={true}  // false for Babylon.js
-  {...props}
-/>
+// Use Three.js engine
+<Map useThreeJs={true} {...props} />
+
+// Use Babylon.js engine (default)
+<Map useThreeJs={false} {...props} />
 ```
 
-### Custom Data Visualization
-
-```tsx
-const myData = [
-  { id: '1', u: 0, v: 0, type: 'json', title: 'Config' },
-  { id: '2', u: 1, v: 0, type: 'pdf', title: 'Report' },
-  { id: '3', u: 0, v: 1, type: 'csv', title: 'Data' }
-];
-
-<Map octos={myData} onOctoClick={handleClick} />
-```
-
----
-
-## 🎨 Customization
-
-### Grid Configuration
+### Custom Hex Grid Configuration
 
 ```typescript
-// Customize hex dimensions
+import HexDefinition from './hexmap/shared/utils/cartesian-hexagonal';
+
 const hexDimensions = new HexDefinition(
-  55,   // Size
-  1,    // Spacing
+  55,   // Hex size in pixels
+  1,    // Spacing multiplier
   0,    // U offset
   3     // V offset
 );
 ```
 
-### Color Schemes
-
-```tsx
-<Map
-  backgroundColor="#0a0a0a"
-  gridColor="#808080"
-  pulseEnabled={true}
-/>
-```
-
 ---
 
-## 🔧 API Reference
+## API Reference
 
-### Map Component Props
+### Map Component
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `octos` | `OctoType[]` | `[]` | Array of data objects to display |
+| `octos` | `OctoType[]` | `[]` | Array of data objects to visualize |
 | `viewMode` | `'public' \| 'personal' \| 'all-users' \| 'chat'` | `'public'` | Display mode |
-| `onOctoClick` | `(octo: OctoType) => void` | - | Click handler |
+| `onOctoClick` | `(octo: OctoType) => void` | - | Click event handler |
 | `backgroundColor` | `string` | `'#000000'` | Scene background color |
-| `gridColor` | `string` | `'#808080'` | Hexagonal grid color |
-| `pulseEnabled` | `boolean` | `false` | Enable pulse animation |
+| `gridColor` | `string` | `'#808080'` | Hexagonal grid line color |
+| `pulseEnabled` | `boolean` | `false` | Enable grid pulse animation |
 | `useThreeJs` | `boolean` | `false` | Use Three.js instead of Babylon.js |
 
-### Camera Controls (Global)
+### Global Camera API
 
 ```typescript
-// Available via window.__hiveCamera
+// Access via window object
 window.__hiveCamera.setMode('pan' | 'tilt' | 'spin' | 'zoom');
 window.__hiveCamera.resetRotation();
 ```
 
----
+### Keyboard Shortcuts
 
-## 🎯 Use Cases
-
-### 1. **Spatial Project Manager**
-Transform your project workflow with a 3D workspace where resources are organized spatially.
-
-### 2. **Data Exploration Platform**
-Visualize complex datasets in an intuitive hexagonal layout with automatic positioning.
-
-### 3. **Decentralized Data Sharing**
-Built-in Firebase and GunDB support for collaborative, real-time data synchronization.
-
-### 4. **Educational Tools**
-Interactive 3D interfaces for teaching coordinate systems, spatial reasoning, and data structures.
-
-### 5. **Game Development**
-Perfect foundation for hex-based strategy games, board game simulations, or tactical interfaces.
+- **WASD / Arrow Keys** - Pan camera
+- **+/-** - Zoom in/out
+- **H** - Toggle help
+- **R** - Reset rotation
+- **1-4** - Switch camera modes (pan/tilt/spin/zoom)
 
 ---
 
-## 🛠️ Development
+## Advanced Configuration
+
+### Custom Color Schemes
+
+```tsx
+<Map
+  backgroundColor="#0a0a0a"
+  gridColor="#4a5568"
+  pulseEnabled={true}
+/>
+```
+
+### File Type Customization
+
+Edit `src/hexmap/three/meshes/OctoMesh.tsx` or `src/hexmap/core/meshes/OctoMeshFactory.ts`:
+
+```typescript
+const FILE_TYPE_COLORS = {
+  json: '#FFD600',
+  csv: '#4CAF50',
+  pdf: '#F44336',
+  // Add custom types...
+};
+```
+
+---
+
+## Development
 
 ### Available Scripts
 
 ```bash
-npm run dev          # Start development server
+npm run dev          # Start development server (Vite)
 npm run build        # Build for production
-npm run preview      # Preview production build
+npm run preview      # Preview production build locally
 npm run lint         # Run ESLint
-npm run lint:fix     # Fix linting issues
-npm run format       # Format with Prettier
+npm run lint:fix     # Auto-fix linting issues
+npm run format       # Format code with Prettier
 npm run type-check   # TypeScript type checking
 ```
 
-### Tech Stack Details
+### Technology Stack
 
-- **Frontend Framework:** React 19.1+ with TypeScript 5.6+
-- **3D Rendering:** Three.js 0.182 + React Three Fiber 9.5
-- **Alt Rendering:** Babylon.js 7.54
-- **Coordinate System:** Honeycomb-grid 4.1.5
-- **Build Tool:** Vite 7.0
-- **Styling:** Tailwind CSS 3.4
-- **Backend:** Firebase 11.9 + GunDB 0.2020
-- **Animation:** Framer Motion 11.18
+**Frontend**
+- React 19.1+ with TypeScript 5.6+
+- Three.js 0.182 + React Three Fiber 9.5
+- Babylon.js 7.54
+- Framer Motion 11.18 for animations
+
+**3D & Spatial**
+- Honeycomb-grid 4.1.5 (hexagonal mathematics)
+- React Three Drei (R3F helpers)
+- React Three Postprocessing (effects)
+
+**Backend & Data**
+- Firebase 11.9 (Authentication, Firestore)
+- GunDB 0.2020 (decentralized sync)
+
+**Build & Tooling**
+- Vite 7.0
+- Tailwind CSS 3.4
+- PostCSS + Autoprefixer
 
 ---
 
-## 📚 Documentation
+## Documentation
 
-- 📖 **[Architecture Guide](./ARCHITECTURE.md)** - Detailed system architecture
-- 🏗️ **[Project Hive Concept](./PROJECT_HIVE_CONCEPT.md)** - Vision and roadmap
-- 🔄 **[Migration Guide](./MIGRATION_MAPPING.md)** - Babylon → Three.js migration
-- 📝 **[Changelog](./CHANGELOG.md)** - Version history
+- **[Architecture Guide](./ARCHITECTURE.md)** - System design and technical decisions
+- **[Project Hive Concept](./PROJECT_HIVE_CONCEPT.md)** - Vision and roadmap
+- **[Migration Guide](./MIGRATION_MAPPING.md)** - Babylon to Three.js migration reference
+- **[Changelog](./CHANGELOG.md)** - Version history and updates
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
-We welcome contributions! OpenDataHive is designed to be a reusable framework for anyone building spatial interfaces.
+Contributions are welcome! OpenDataHive is designed as a reusable framework for spatial interfaces.
 
-### How to Contribute
+### Contribution Workflow
+
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
+
+### Code Standards
+
+- Follow existing TypeScript and ESLint conventions
+- Add JSDoc comments for public APIs
+- Include unit tests for new features
+- Update documentation as needed
 
 ---
 
-## 🌍 Community Projects Using OpenDataHive
+## Community Projects
 
-OpenDataHive serves as the foundation for various spatial data visualization projects:
+OpenDataHive is used as the foundation for various spatial data visualization projects:
 
-- 🗺️ **Interactive Data Maps** - Geographic and conceptual data mapping
-- 📊 **Dashboard Replacements** - 3D spatial dashboards
-- 🎮 **Hex-Based Games** - Strategy and board game implementations
-- 🏗️ **Workspace Organizers** - Spatial project management tools
+- Interactive geographic data mapping
+- 3D spatial dashboards and analytics
+- Hex-based strategy game prototypes
+- Collaborative workspace organizers
 
-*Using OpenDataHive? Let us know! We'd love to feature your project.*
+*Using OpenDataHive in your project? Open an issue to get featured here.*
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- **Honeycomb-grid** - Hexagonal coordinate mathematics
-- **Three.js Community** - 3D rendering ecosystem
-- **Babylon.js Team** - Robust 3D engine
-- **React Three Fiber** - Declarative Three.js in React
-
----
-
-## 📞 Contact & Support
-
-- 🐛 **Issues:** [GitHub Issues](https://github.com/yourusername/opendatahive/issues)
-- 💬 **Discussions:** [GitHub Discussions](https://github.com/yourusername/opendatahive/discussions)
-- 📧 **Email:** contact@opendatahive.dev
+- **honeycomb-grid** - Hexagonal coordinate mathematics
+- **Three.js** and **React Three Fiber** communities
+- **Babylon.js** development team
+- All open-source contributors
 
 ---
 
-## 🎯 Keywords (SEO)
+## Support
 
-`hexagonal grid` `hex map` `3D visualization` `spatial data` `React Three Fiber` `Babylon.js` `Three.js` `data visualization framework` `honeycomb grid` `hexagonal coordinates` `spatial interface` `3D UI` `immersive data` `project management 3D` `hex-based` `coordinate system` `TypeScript grid` `React 3D` `interactive map` `data exploration` `spatial organization`
+- **Issues**: [GitHub Issues](https://github.com/Garletz/opendatahive/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Garletz/opendatahive/discussions)
+
+---
+
+**Keywords**: hexagonal grid, hex map, 3D visualization, spatial data, React Three Fiber, Babylon.js, Three.js, data visualization framework, honeycomb grid, hexagonal coordinates, spatial interface, immersive data, TypeScript, WebGL
 
 ---
 
 <div align="center">
 
-**⭐ Star this repo if you find it useful!**
+**Star this repository if you find it useful**
 
-Made with ❤️ by the OpenDataHive Team
+Made by the OpenDataHive Team
 
 </div>
